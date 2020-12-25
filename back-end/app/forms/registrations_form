@@ -1,0 +1,30 @@
+class RegistrationsForm
+  include ActiveModel::Model
+  attr_accessor :nick_name, :password, :full_name, :tel, :image_name, :information,
+                :point, :age, :sex, :address, :link_fb
+  def save!
+    raise BadRequest, JSON(errors.full_messages) if invalid?
+
+    @user = User.new(attr_user)
+    @user.save
+    true
+  end
+
+  private
+
+  def attr_user
+    {
+      nick_name: nick_name,
+      password: password,
+      full_name: full_name,
+      tel: tel,
+      image_name: image_name,
+      information: information,
+      point: point,
+      age: age,
+      sex: sex,
+      address: address,
+      link_fb: link_fb
+    }
+  end
+end

@@ -1,0 +1,3 @@
+- bundle i
+- rails db:migrate
+- rails s
