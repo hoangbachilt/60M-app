@@ -11,21 +11,27 @@
         <span class="point">{{ cart.point }}</span><span class="point-img"><img src="../../assets/Point.png" alt="point"></span>
         <p class="price">{{new Intl.NumberFormat('it-IT', { style: 'currency', currency: 'VND' }).format(cart.price)}}</p>
         </div>
+        <div v-if="counts[cart.id] >= 2">
+          Count: {{ counts[cart.id] }}
+        </div>
+      </div>
+      <div class="component-cart">
+        Total Price: {{ total_price }} VNĐ
       </div>
     </div>
     <form action="#">
-        <table>
-          <tr>
-            <input type="radio" name="payment" id="register_paymentonline" v-model="status" value="true"/>
-            <label for="register_gendermale"><strong> Pay with MoMo</strong></label>
+      <table>
+        <tr>
+          <input type="radio" name="payment" id="register_paymentonline" v-model="status" value="true"/>
+          <label for="register_gendermale"><strong> Pay with MoMo</strong></label>
+          
+          <input type="radio" name="payment" id="register_paymentdirect" v-model="status" value="false"/>
+          <label for="register_genderfemale"><strong> Pay at ice-cream shop </strong></label>
             
-            <input type="radio" name="payment" id="register_paymentdirect" v-model="status" value="false"/>
-            <label for="register_genderfemale"><strong> Pay at ice-cream shop </strong></label>
-              
-          </tr>
-        </table>
-        <img src="../../../public/assets/QR.png" alt="Avatar" align="top">
-      </form>
+        </tr>
+      </table>
+      <img src="../../../public/assets/QR.png" alt="Avatar" align="top">
+    </form>
     <button class="button button2" @click="buyCream(carts, point)">Confirm</button>
   </div>
 </template>
@@ -41,20 +47,30 @@ export default {
   data() {
     return {
       flag: true,
+      counts: this.$store.state.user.countCart,
       carts: this.$store.state.user.carts,
       status: null,
+      total_price: 0,
       errors: []
     };
   },
   computed: {
     ...mapGetters(["point"]),
   },
+  created() {
+    this.carts.forEach((cart) => {
+      this.total_price = parseInt(this.total_price) + parseInt(cart.price)*parseInt(this.counts[cart.id])
+    })
+  },
   methods: {
     buyCream(carts, point) {
       var self = this
       var cream_ids = []
       carts.forEach((cart) => {
-        cream_ids.push(cart.id)
+        if (self.counts[cart.id]) {
+          cream_ids.push(Array(self.counts[cart.id]).fill(cart.id))
+          cream_ids = cream_ids.flat()
+        }
       })
       axios
       .post("http://localhost:3000/cream_purchases", {cream_ids: cream_ids, point: point, status: self.status}, { headers: authHeader() })

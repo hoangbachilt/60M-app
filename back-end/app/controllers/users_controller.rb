@@ -8,7 +8,11 @@ class UsersController < ApplicationController
 
   def create
     user = User.new user_params
-    user.image.attach(params[:user][:image])
+    if params[:user][:image] != "null"
+      user.image.attach(params[:user][:image])
+    else
+      user.image.attach(io: File.open(Rails.root.join("app", "assets", "images", "avatar-default.png")), filename: 'avatar-default.png' , content_type: "image/png")
+    end
     user.invalid user
   end
 
@@ -27,6 +31,6 @@ class UsersController < ApplicationController
   end
 
   def edit_params
-    params.require(:edit_params).permit(:full_name, :tel, :age, :sex, :information, :link_fb)
+    params.require(:edit_params).permit(:full_name, :tel, :age, :sex, :information, :link_fb, :image, :image_name)
   end
 end

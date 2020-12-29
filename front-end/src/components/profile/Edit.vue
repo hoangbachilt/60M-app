@@ -10,6 +10,9 @@
       <span id="e241_117">Update Profile Picture</span><span id="e241_118">{{ user.full_name }}</span>
       <div id="e241_119"><img :src="'../../../public/assets/' + image_url" alt=""></div>
     </div>
+    <div class="form-group">
+      <input type="file" ref="inputFile" @change="uploadFile" />
+    </div>
     <div id="e241_120">
       <span id="e241_121">{{ user.point }}</span><span id="e241_122">Date Point</span>
       <div id="e241_123"><img src="../../assets/Point.png" alt="point"></div>
@@ -79,20 +82,27 @@ export default {
   })
  },
  methods: {
+  uploadFile() {
+    this.inputPicture = this.$refs.inputFile.files[0];
+  },
   save() {
     let self = this;
+    let formData = new FormData();
     const params = {
-      edit_params: {
-        full_name: this.full_name,
-        tel: this.tel,
-        age: this.age,
-        sex: this.sex,
-        information: this.information,
-        link_fb: this.link_fb
-      }
+      "edit_params[full_name]": this.full_name,
+      "edit_params[image]": this.inputPicture,
+      "edit_params[image_name]": this.inputPicture.name,
+      "edit_params[information]": this.information,
+      "edit_params[tel]": this.tel,
+      "edit_params[age]": this.age,
+      "edit_params[sex]": this.sex,
+      "edit_params[link_fb]": this.link_fb,
     }
+    Object.entries(params).forEach(([key, value]) =>
+      formData.append(key, value)
+    );
     axios
-    .put(`http://localhost:3000/users/${JSON.parse(localStorage.getItem("token")).user.id}`, params, { headers: authHeader() })
+    .put(`http://localhost:3000/users/${JSON.parse(localStorage.getItem("token")).user.id}`, formData, { headers: authHeader() })
     .then(response => {
       router.push("profile")
       location.reload()
@@ -140,6 +150,14 @@ export default {
     position:absolute;
     left:596px;
     top:227px;
+  }
+  .form-group {
+    opacity:1;
+    width:302px;
+    height:81px;
+    position:absolute;
+    left:596px;
+    top:310px;
   }
   #e241_117 { 
     color:rgba(113.15624848008156, 144.83998954296112, 226.31249696016312, 1);
@@ -701,6 +719,7 @@ export default {
     font-size:14px;
     letter-spacing:0;
     line-height:undefined;
+    cursor: pointer;
   }
   #e241_166 { 
     opacity:1;

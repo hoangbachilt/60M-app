@@ -1,11 +1,10 @@
 <template>
   <div class="vue-tempalte">
-    <h3>Sign up</h3>
-    <p v-if="errors.length">
-      <ul>
+    <div class="errors" v-if="errors.length">
+      <div>
         <li v-for="error in errors" :key="error.id">{{ error }}</li>
-      </ul>
-     </p>
+      </div>
+    </div>
     <form v-on:submit.prevent="handleSubmit" method="post">
       <div class="form-group">
         <label>Nick name</label>
@@ -64,7 +63,7 @@
 
       <p class="forgot-password text-right">
         Already registered
-        <!-- <router-link :to="{name: 'login'}">sign in?</router-link> -->
+        <router-link :to="{name: 'signin'}">sign in?</router-link>
       </p>
     </form>
   </div>
@@ -96,13 +95,16 @@ export default {
       this.inputPicture = this.$refs.inputFile.files[0];
     },
     handleSubmit() {
+      if (this.inputPicture) {
+        this.image_name = this.inputPicture.name
+      }
       let self = this;
       let formData = new FormData();
       const params = {
         "user[nick_name]": this.nick_name,
         "user[full_name]": this.full_name,
         "user[image]": this.inputPicture,
-        "user[image_name]": this.inputPicture.name,
+        "user[image_name]": this.image_name,
         "user[information]": this.information,
         "user[tel]": this.tel,
         "user[age]": this.age,
@@ -118,7 +120,7 @@ export default {
       );
       axios.post("http://localhost:3000/signup", formData)
       .then(respone => {
-        router.push("signin");
+        location.reload()
       })
       .catch(e => {
         self.errors = JSON.parse(e.response.data.message);
@@ -130,11 +132,20 @@ export default {
 
 <style scoped lang="scss">
   .vue-tempalte {
-    max-width: 50%;
+    max-width: 90%;
     margin: auto;
-    padding-top: 100px;
     h3 {
       text-align: center;
+    }
+    .errors {
+      width: 100%;
+      height: auto;
+      border: 1px solid #ccc;
+      border-radius: 15%;
+      div li {
+        margin-left: 20px;
+        color: red;
+      }
     }
   }
 </style>

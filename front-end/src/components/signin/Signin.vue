@@ -1,13 +1,12 @@
 <template>
   <div class="vue-tempalte">
     <form v-on:submit.prevent="handleSubmit">
-      <h3>Sign in</h3>
-      <p v-if="errors.length">
+      <div class="errors" v-if="errors.length">
         <b>Please correct the following error(s):</b>
-          <ul>
+          <div>
             <li v-for="error in errors" :key="error">{{ error }}</li>
-          </ul>
-      </p>
+          </div>
+      </div>
       <div class="form-group">
         <label>Telephone</label>
           <input type="text" v-model="tel" class="form-control form-control-lg" required />
@@ -42,7 +41,7 @@ export default {
       })
       .then(response => {
         localStorage.setItem('token', JSON.stringify(response.data));
-        router.push("/");
+        location.reload()
       })
       .catch(errors => {
         this.errors.push(errors.response.data.error);
@@ -54,11 +53,20 @@ export default {
 
 <style scoped lang="scss">
   .vue-tempalte {
-    max-width: 50%;
+    max-width: 90%;
     margin: auto;
-    padding-top: 100px;
     h3 {
       text-align: center;
+    }
+    form .errors {
+      width: 100%;
+      height: auto;
+      border: 1px solid #ccc;
+      border-radius: 15%;
+      div li {
+        margin-left: 20px;
+        color: red;
+      }
     }
   }
 </style>

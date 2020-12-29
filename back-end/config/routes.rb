@@ -4,4 +4,5 @@ Rails.application.routes.draw do
   resources :users, only: [:show, :update]
   resources :creams, only: :index
   resources :cream_purchases, only: :create
+  resources :seat_bookings, only: :index
 end

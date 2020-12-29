@@ -12,11 +12,17 @@
           <span class="point">{{ cart.point }}</span><span class="point-img"><img src="../../assets/Point.png" alt="point"></span>
           <p class="price">{{new Intl.NumberFormat('it-IT', { style: 'currency', currency: 'VND' }).format(cart.price)}}</p>
           </div>
-          <div class="ticker" :id="cart.id" v-if="flag == true" @click="checked"><i class="far fa-check-square"></i></div>
-          <div class="ticker" :id="cart.id" v-if="flag == false" @click="checked"><i class="far fa-square"></i></div>
+          <div v-if="counts[cart.id] >= 2">
+            <button class="count" @click="decrementCount(cart)">-</button>
+            <div>{{ counts[cart.id] }}</div>
+            <button class="count" @click="incrementCount(cart)">+</button>
+          </div>
+          <div v-if="counts[cart.id] == 1">
+            <div class="ticker" :id="cart.id" v-if="flag == true" @click="checked(index)"><i class="far fa-check-square"></i></div>
+          </div>
         </div>
       </div>
-      <button @click="payment">Purchase</button>
+      <button class="buy" @click="payment">Purchase</button>
     </div>
     <h2 v-else>Your cart empty</h2>
   </div>
@@ -34,23 +40,21 @@ export default {
     return {
       products: [],
       flag: true,
+      counts: this.$store.state.user.countCart,
       carts: this.$store.state.user.carts,
       errors: []
     };
   },
   computed: {
-    ...mapGetters(["point"]),
+    ...mapGetters(["point"])
   },
   methods: {
+    ...mapActions(['incrementCount', 'decrementCount']),
     payment() {
       router.push("payment")
     },
-    checked() {
-      if (this.flag == true) {
-        this.flag = false
-      } else {
-        this.flag = true
-      }
+    checked(index) {
+      this.$store.dispatch('removeCarts', index);
     }
   }
 };
@@ -64,6 +68,14 @@ export default {
     min-width: 50%;
     h2 {
       margin-top: 100px;
+    }
+    div .buy {
+      margin-top: 40px;
+      width: 70px;
+      height: 30px;
+      background-color: cornflowerblue;
+      color: white;
+      border-radius: 10%;
     }
   }
   .content{
@@ -80,6 +92,13 @@ export default {
       max-height: 120px;
       margin-top: 20px;
       border-radius: 1%;
+      div .count {
+        width: 70px;
+        height: 30px;
+        background-color: cornflowerblue;
+        color: white;
+        border-radius: 10%;
+      }
   }
   .cart-content{
       width: 100%;
@@ -100,14 +119,6 @@ export default {
   }
   .price{
       color: #ffcb8e;
-  }
-  button{
-      margin-top: 40px;
-      width: 70px;
-      height: 30px;
-      background-color: cornflowerblue;
-      color: white;
-      border-radius: 10%;
   }
   .point-img img{
       height: 13px;

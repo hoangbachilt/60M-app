@@ -15,12 +15,19 @@
       <router-link :to="{ name: 'profile' }" class="fa fa-user-circle" v-if="user_name">
         <span>{{ user_name }}</span></router-link
       >
-      <router-link :to="{ name: 'signup' }" class="fa fa-user-circle" v-if="!user_name">
-        <span>Sign up</span></router-link
-      >
-      <router-link :to="{ name: 'signin' }" class="fa fa-user-circle" v-if="!user_name">
-        <span>Sign in</span></router-link
-      >
+      <b-a v-b-modal.modal-2 class="fa fa-user-circle" v-if="!user_name"><span>Sign up</span></b-a>
+
+      <b-modal id="modal-2" title="Sign Up">
+        <signup />
+      </b-modal>
+      <!-- <router-link :to="{ name: 'signin' }" class="fa fa-user-circle" v-if="!user_name">
+        <span data-toggle="modal" data-target="#exampleModalCenter">Sign in</span></router-link
+      > -->
+        <b-a v-b-modal.modal-1 class="fa fa-user-circle" v-if="!user_name"><span>Sign in</span></b-a>
+
+        <b-modal id="modal-1" title="Sign In">
+          <signin />
+        </b-modal>
       <router-link :to="{ name: 'home' }" class="fa fa-user-circle" v-if="user_name">
         <span @click="signOut">Sign out</span></router-link
       >
@@ -31,7 +38,12 @@
 <script>
 import axios from "axios";
 import { mapGetters } from "vuex";
+import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap-vue/dist/bootstrap-vue.css'
 import authHeader from "../../services/auth-header"
+import Signin from "../signin/Signin.vue"
+import Signup from "../signup/Signup.vue"
+import router from "../../router"
 export default {
   data() {
     return {
@@ -51,8 +63,13 @@ export default {
   methods: {
     signOut() {
       localStorage.removeItem("token");
+      router.push("/")
       location.reload()
     }
+  },
+  components: {
+    Signin,
+    Signup
   }
 };
 </script>
@@ -79,7 +96,7 @@ export default {
     padding: 10px 20px;
   }
   .menu {
-    a {
+    a,b-a {
       color: #99b84f;
       text-align: center;
       padding: 14px 16px;
@@ -112,4 +129,5 @@ export default {
     }
   }
 }
+
 </style>

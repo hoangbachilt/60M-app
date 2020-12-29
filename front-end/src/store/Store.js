@@ -15,42 +15,10 @@ export const store = new Vuex.Store({
     user: {
       id: 1,
       point: 0,
-      carts: []
+      carts: [],
+      countCart: {}
     },
-    products: [
-      {
-        id: 1,
-        name: 'melon love',
-        price: 12000,
-        point: 1,
-        image: "../../public/assets/Product1.jpg",
-        quantity: 1000
-      },
-      {
-        id: 2,
-        name: 'mango cup',
-        price: 12000,
-        point: 1,
-        image: "../../public/assets/Product2.jpg",
-        quantity: 1000
-      },
-      {
-        id: 3,
-        name: 'ice cream stick',
-        price: 12000,
-        point: 1,
-        image: "../../public/assets/Product3.jpg",
-        quantity: 1000
-      },
-      {
-        id: 4,
-        name: 'buffer ice',
-        price: 50000,
-        point: 1,
-        image: "../../public/assets/Product4.jpg",
-        quantity: 1000
-      }
-    ],
+    seatBookings: [],
     listData: [
       {
         id: 1,
