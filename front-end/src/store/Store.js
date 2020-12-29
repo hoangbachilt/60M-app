@@ -64,7 +64,8 @@ export const store = new Vuex.Store({
         zalo: "zalo.com.vn/anh",
         phone: '0123456789'
       }
-    ]
+    ],
+    seats: []
   },
   getters,
   mutations,

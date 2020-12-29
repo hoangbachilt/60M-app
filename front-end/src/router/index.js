@@ -13,6 +13,7 @@ import Profile from '../components/profile/Profile.vue'
 import Edit from '../components/profile/Edit.vue'
 import Cart from '../components/cart/Cart.vue'
 import Payment from '../components/cart/Payment.vue'
+import Seat from '../components/seat/Seat.vue'
 
 Vue.use(Router)
 
@@ -95,6 +96,14 @@ const routes = [
     name: 'payment',
     components: {
       default: Payment,
+      'comp-header': Header
+    }
+  },
+  {
+    path: '/seat',
+    name: 'seat',
+    components: {
+      default: Seat,
       'comp-header': Header
     }
   },

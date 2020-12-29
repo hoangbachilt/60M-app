@@ -21,3 +21,7 @@ export const incrementCount = ({commit}, payload) => {
 export const decrementCount = ({commit}, payload) => {
   commit('decrementCount', payload)
 }
+
+export const seats = ({commit}, payload) => {
+  commit('seat', payload)
+}

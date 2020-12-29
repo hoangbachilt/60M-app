@@ -77,6 +77,8 @@
 <script>
 import 'bootstrap/dist/css/bootstrap.css'
 import { mapActions, mapGetters } from 'vuex'
+import axios from "axios"
+import authHeader from "../../services/auth-header.js"
 
 export default {
   data() {
@@ -84,11 +86,15 @@ export default {
       firstAge: 0,
       lastAge: 0,
       location: '',
+      point: null,
       randomData: null
     }
   },
+  created() {
+    this.getUser()
+  },
   computed: {
-    ...mapGetters(['point', 'confirm', 'connection'])
+    ...mapGetters(['confirm', 'connection'])
   },
   methods: {
     onFindYourLove(){
@@ -99,8 +105,16 @@ export default {
       })
       this.randomData = this.$store.getters.data[Math.round(Math.random() * (this.$store.getters.data.length - 1))]
       this.$store.commit('decrementPoint')
+      this.point --
     },
-    ...mapActions(['toggleConfirm'])
+    ...mapActions(['toggleConfirm']),
+    getUser() {
+      axios
+      .get(`http://localhost:3000/users/${JSON.parse(localStorage.getItem("token")).user.id}`, { headers: authHeader() })
+      .then(response => {
+        this.point = response.data.user.point
+      })
+    }
   }
 }
 </script>

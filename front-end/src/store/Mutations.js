@@ -35,9 +35,13 @@ export const bookingSeats = (state, payload) => {
 }
 
 export const incrementCount = (state, payload) => {
-  state.user.countCart[payload.id] += 1
+  state.user.countCart[payload.id] ++
 }
 
 export const decrementCount = (state, payload) => {
-  state.user.countCart[payload.id] -= 1
+  state.user.countCart[payload.id] --
+}
+
+export const seat = (state, payload) => {
+  state.seats = payload
 }

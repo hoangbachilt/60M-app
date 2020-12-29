@@ -40,13 +40,11 @@ export default {
     return {
       products: [],
       flag: true,
-      counts: this.$store.state.user.countCart,
-      carts: this.$store.state.user.carts,
       errors: []
     };
   },
   computed: {
-    ...mapGetters(["point"])
+    ...mapGetters(["point", "carts", "counts"])
   },
   methods: {
     ...mapActions(['incrementCount', 'decrementCount']),
